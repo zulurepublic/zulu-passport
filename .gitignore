@@ -1,0 +1,5 @@
+node_modules
+/build
+/flats
+.specifications
+.DS_Store

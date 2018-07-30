@@ -1,0 +1,25 @@
+{
+  "name": "zulu-passport",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "bash scripts/run_test.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zulurepublic/zulu-passport.git"
+  },
+  "keywords": [
+    "passport"
+  ],
+  "author": "Timo Hedke",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zulurepublic/zulu-passport/issues"
+  },
+  "homepage": "https://github.com/zulurepublic/zulu-passport#readme"
+}
