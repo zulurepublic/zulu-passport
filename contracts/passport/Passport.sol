@@ -19,9 +19,7 @@ contract Passport is PassportInterface {
     }
 
     struct Key {
-        // uint256[] purposes;
         uint256 purpose;
-
         uint256 keyType;
         bytes32 key;
     }
@@ -53,11 +51,8 @@ contract Passport is PassportInterface {
 
         keys[bytes32(sender)].purpose = 31; 
 
-
-
         supportedInterfaces[ERC165ID()] = true;
         supportedInterfaces[PassportInterfaceID()] = true;
-
     }
 
     // Functions
@@ -83,11 +78,7 @@ contract Passport is PassportInterface {
         if((keys[_key].purpose & shiftedPurpose) == shiftedPurpose){
             return true;
         }
-        // for (uint i = 0; i < keys[_key].purposes.length; i++) {
-        //     if (keys[_key].purposes[i] == purpose) {
-        //         return true;
-        //     }
-        // }
+
         return false;    
     }
 
@@ -139,14 +130,7 @@ contract Passport is PassportInterface {
             if((keys[_key].purpose & shiftedPurpose) == 0){
                 keysByPurpose[_purpose].push(_key);
                 keys[_key].purpose = keys[_key].purpose | shiftedPurpose; 
-
             }
-            // //purpose exists?
-            // for (uint i = 0; i < keys[_key].purposes.length; i++) {
-            //     if (keys[_key].purposes[i] == _purpose) {
-            //         return true;
-            //     }
-            // }
         }
         emit KeyAdded(_key, _purpose, _keyType);
 
@@ -169,33 +153,18 @@ contract Passport is PassportInterface {
 
         require(keys[_key].key == _key, "Key does not exist and cant be removed");
 
-        emit KeyRemoved(keys[_key].key, _purpose, keys[_key].keyType);
-
 
         //remove _purpose
         keys[_key].purpose = (shiftPurpose(_purpose) ^ 0) & keys[_key].purpose;
 
-
-
-        //TODO better solution use bitmask?
         //Look for key in keysByPurpose
         for (uint i = 0; i < keysByPurpose[_purpose].length; i++) {
             if (keysByPurpose[_purpose][i] == _key) {
                 delete keysByPurpose[_purpose][i];
-
-                //Look for key in keys[_key].purposes
-                // for (uint j = 0; j < keys[_key].purposes.length; j++) {
-                //     if (keys[_key].pruposes[i] == _purpose) {
-                //         delete keys[_key].pruposes[i];
-                //         if(keys[_key].pruposes.length == 0){
-                //             delete keys[_key];
-
-                //         }
-                //         return true;
-                //     }
-                // }
             }
         }
+
+        emit KeyRemoved(keys[_key].key, _purpose, keys[_key].keyType);
         return true;
     }
 
@@ -247,7 +216,7 @@ contract Passport is PassportInterface {
         string _uri
         )
         public 
-        returns (uint256 claimRequestId)
+        returns (bytes32 claimId)
     {
         bytes32 claimId = keccak256(issuer, _topic);
         // require(keyHasPurpose(bytes32(msg.sender), 1), "No authority to add claims")
