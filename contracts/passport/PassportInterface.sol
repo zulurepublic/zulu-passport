@@ -1,6 +1,6 @@
 pragma solidity 0.4.24;
 
-import "./ERC165.sol";
+import "../ERC165.sol";
 
 /**
  * @title PassportInterface
@@ -16,9 +16,12 @@ contract PassportInterface is ERC165 {
     function PassportInterfaceID() public pure returns (bytes4) {
         return (
             this.getKey.selector ^ this.keyHasPurpose.selector ^ this.getKeysByPurpose.selector ^
-            this.addKey.selector ^ this.execute.selector ^ this.approve.selector ^ this.removeKey.selector
+            this.addKey.selector ^ this.removeKey.selector ^ this.getClaimIdsByTopic.selector ^
+            this.addClaim.selector ^ this.removeClaim.selector    
         );
     }
+
+
 
     // KeyType
     uint256 constant ECDSA_TYPE = 1;
@@ -28,13 +31,13 @@ contract PassportInterface is ERC165 {
     event KeyAdded(bytes32 indexed key, uint256 indexed purpose, uint256 indexed keyType);
     event KeyRemoved(bytes32 indexed key, uint256 indexed purpose, uint256 indexed keyType);
 
-    event ClaimRequested(uint256 indexed claimRequestId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);
+    event ClaimRequested(bytes32 indexed claimId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);
     event ClaimAdded(bytes32 indexed claimId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);
     event ClaimRemoved(bytes32 indexed claimId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);
     event ClaimChanged(bytes32 indexed claimId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);
 
     // Functions
-    function getKey(bytes32 _key) public view returns(uint256[] purposes, uint256 keyType, bytes32 key);
+    function getKey(bytes32 _key) public view returns(uint256 purpose, uint256 keyType, bytes32 key);
     function keyHasPurpose(bytes32 _key, uint256 purpose) public view returns(bool exists);
     function getKeysByPurpose(uint256 _purpose) public view returns(bytes32[] keys);
     function addKey(bytes32 _key, uint256 _purpose, uint256 _keyType) public returns (bool success);
