@@ -219,10 +219,8 @@ contract Passport is PassportInterface {
         returns (bytes32 claimId)
     {
         claimId = keccak256(issuer, _topic);
-        // require(keyHasPurpose(bytes32(msg.sender), 1), "No authority to add claims")
-        // require(canAddClaim(), "No authority to add claims");
+     
         
-        //Todo What does it mean to request? Who can add claims
         if(!keyHasPurpose(bytes32(msg.sender), 1)){
             emit ClaimRequested(claimId, _topic, _scheme, issuer, _signature, _data, _uri);
             return;

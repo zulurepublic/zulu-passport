@@ -46,10 +46,12 @@ contract ClaimVerifier {
 
         // Fetch claim from user
         ( topic, scheme, issuer, sig, data, ) = _identity.getClaim(claimId);
-        if (!data.equal(_data)) {
-            return false;
+        if (data.equal(_data) && issuer == _issuer && topic == _topic) {
+        
+            return _validSignature(address(_identity), topic, scheme, issuer, sig, data);
         }
-        return _validSignature(address(_identity), topic, scheme, issuer, sig, data);
+        return false;
+
     }
 
     function claimIsValid(address _issuer, PassportInterface _identity, uint256 _topic)
@@ -66,17 +68,12 @@ contract ClaimVerifier {
         bytes32 claimId = keccak256(abi.encodePacked(_issuer, _topic));
         
         ( topic, scheme, issuer, sig, data, ) = _identity.getClaim(claimId);
-
-        return _validSignature(address(_identity), topic, scheme, issuer, sig, data);
+        if(issuer == _issuer && topic == _topic){
+            return _validSignature(address(_identity), topic, scheme, issuer, sig, data);
+        }
+        return false;
     }
 
-    /// @dev Checks if a given claim is valid
-    /// @param _topic Type of claim
-    /// @param _scheme Scheme used for the signatures
-    /// @param issuer Address of issuer
-    /// @param _signature The actual signature
-    /// @param _data The data that was signed
-    /// @return `false` if the signature is invalid or if the scheme is not implemented
     function _validSignature(
         address _identity,
         uint256 _topic,
@@ -89,22 +86,16 @@ contract ClaimVerifier {
         view
         returns (bool)
     {
+
         if (_scheme == 1) {
             address signedBy = getSignatureAddress(keccak256(abi.encodePacked(_identity, _topic, _data)), _signature);
             if (issuer == signedBy) {
                 return true;
             } else
             if (issuer.doesContractImplementInterface(PassportID())) {
-        
                 return PassportInterface(issuer).keyHasPurpose(bytes32(signedBy), 4);
             }
-            // Invalid
-            return false;
-        } else {
-            //TODO
-            // Not implemented
-            return false;
-        }
+        } 
         //All else Invalid
         return false;
     }

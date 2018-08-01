@@ -89,7 +89,6 @@ contract(
                 .addClaim(topic, scheme, passportCitizen2.address, signedClaim, data, uri, {from: citizen1})
                 .should.be.fulfilled;
             await testClaim(passportCitizen1, topic, passportCitizen2.address, signedClaim, data, uri);
-
             (await claimVerifier.claimIsValid.call(passportCitizen2.address, passportCitizen1.address, topic)).should.be.true;      
         });
 
