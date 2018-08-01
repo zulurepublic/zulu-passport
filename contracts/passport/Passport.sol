@@ -153,9 +153,10 @@ contract Passport is PassportInterface {
 
         require(keys[_key].key == _key, "Key does not exist and cant be removed");
 
+        emit KeyRemoved(keys[_key].key, _purpose, keys[_key].keyType);
 
         //remove _purpose
-        keys[_key].purpose = (shiftPurpose(_purpose) ^ 0) & keys[_key].purpose;
+        keys[_key].purpose = ~shiftPurpose(_purpose) & keys[_key].purpose;
 
         //Look for key in keysByPurpose
         for (uint i = 0; i < keysByPurpose[_purpose].length; i++) {
@@ -218,7 +219,7 @@ contract Passport is PassportInterface {
         public 
         returns (bytes32 claimId)
     {
-        bytes32 claimId = keccak256(issuer, _topic);
+        claimId = keccak256(issuer, _topic);
         // require(keyHasPurpose(bytes32(msg.sender), 1), "No authority to add claims")
         // require(canAddClaim(), "No authority to add claims");
         
@@ -256,6 +257,4 @@ contract Passport is PassportInterface {
     function canRemoveClaim() internal returns (bool){
         return keyHasPurpose(bytes32(msg.sender), 1);
     }
-
-
 }

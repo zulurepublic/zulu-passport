@@ -29,7 +29,7 @@ contract PassportInterface is ERC165 {
 
     // Events
     event KeyAdded(bytes32 indexed key, uint256 indexed purpose, uint256 indexed keyType);
-    event KeyRemoved(bytes32 indexed key, uint256 indexed purpose, uint256 indexed keyType);
+    event KeyRemoved(bytes32  key, uint256  purpose, uint256  keyType);
 
     event ClaimRequested(bytes32 indexed claimId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);
     event ClaimAdded(bytes32 indexed claimId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);
@@ -37,6 +37,8 @@ contract PassportInterface is ERC165 {
     event ClaimChanged(bytes32 indexed claimId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);
 
     // Functions
+    function init(address sender) public;
+
     function getKey(bytes32 _key) public view returns(uint256 purpose, uint256 keyType, bytes32 key);
     function keyHasPurpose(bytes32 _key, uint256 purpose) public view returns(bool exists);
     function getKeysByPurpose(uint256 _purpose) public view returns(bytes32[] keys);
@@ -45,6 +47,6 @@ contract PassportInterface is ERC165 {
 
     function getClaim(bytes32 _claimId) public view returns(uint256 topic, uint256 scheme, address issuer, bytes signature, bytes data, string uri);
     function getClaimIdsByTopic(uint256 _topic) public view returns(bytes32[] claimIds);
-    function addClaim(uint256 _topic, uint256 _scheme, address issuer, bytes _signature, bytes _data, string _uri) public returns (uint256 claimRequestId);
+    function addClaim(uint256 _topic, uint256 _scheme, address issuer, bytes _signature, bytes _data, string _uri) public returns(bytes32 claimId);
     function removeClaim(bytes32 _claimId) public returns (bool success);
 }
