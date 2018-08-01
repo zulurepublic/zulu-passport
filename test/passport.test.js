@@ -64,7 +64,13 @@ contract(
         _keyType.should.be.bignumber.eq(keyType);
         _purpose.should.be.bignumber.eq(purposes);
     }
-
+    
+    it("ERC165ID", async () => {
+        "0x01ffc9a7".should.be.eq( await passport.ERC165ID()) //0x01ffc9a7
+    });
+    it("PassportInterfaceID", async () => {
+        "0x61f0aaf8".should.be.eq( await passport.PassportInterfaceID()) //0x01ffc9a7
+    });
     describe("#getKey", () => {
         it("should get key data of address", async () => {
             const key = await passportHelper.addressToBytes32(citizen1);

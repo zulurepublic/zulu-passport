@@ -21,15 +21,13 @@ contract PassportInterface is ERC165 {
         );
     }
 
-
-
     // KeyType
     uint256 constant ECDSA_TYPE = 1;
     uint256 constant RSA_TYPE = 2;
 
     // Events
     event KeyAdded(bytes32 indexed key, uint256 indexed purpose, uint256 indexed keyType);
-    event KeyRemoved(bytes32  key, uint256  purpose, uint256  keyType);
+    event KeyRemoved(bytes32 indexed key, uint256 indexed purpose, uint256 indexed keyType);
 
     event ClaimRequested(bytes32 indexed claimId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);
     event ClaimAdded(bytes32 indexed claimId, uint256 indexed topic, uint256 scheme, address indexed issuer, bytes signature, bytes data, string uri);

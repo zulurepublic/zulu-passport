@@ -19,7 +19,7 @@ contract ClaimVerifier {
 
 
     function PassportID() public pure returns (bytes4) {
-        return (0xdc3d2a7b);
+        return (0x61f0aaf8);
     }
 
     function getSignatureAddress(bytes32 toSign, bytes signature)
@@ -100,13 +100,6 @@ contract ClaimVerifier {
             }
             // Invalid
             return false;
-        // } else 
-        // if(_scheme == CONTRACT_SCHEME) {
-        //     // if (issuer.doesContractImplementInterface(ClaimIssuerContractID())) {
-        //     //     // Issuer is a ClaimIssuerContract
-        //     //     // return true;
-        //     //     return ClaimIssuerContractInterface(issuer).getIssuedClaim(_identity, _topic, _data);
-        //     // }
         } else {
             //TODO
             // Not implemented

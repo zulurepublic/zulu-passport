@@ -153,7 +153,6 @@ contract Passport is PassportInterface {
 
         require(keys[_key].key == _key, "Key does not exist and cant be removed");
 
-        emit KeyRemoved(keys[_key].key, _purpose, keys[_key].keyType);
 
         //remove _purpose
         keys[_key].purpose = ~shiftPurpose(_purpose) & keys[_key].purpose;
