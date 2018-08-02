@@ -9,6 +9,7 @@ import "./PassportInterface.sol";
  */
 contract Passport is PassportInterface {
 
+// Todo Check user controlle is this the best way to do it?
     struct Claim {
         uint256 topic;
         uint256 scheme;
@@ -30,6 +31,7 @@ contract Passport is PassportInterface {
     mapping (bytes32 => Claim) claims;
     mapping (uint256 => bytes32[]) claimsByTopic;
 
+    
 
     bool initialized = false;
 
@@ -111,7 +113,7 @@ contract Passport is PassportInterface {
      * @return Boolen true on success
      */
     function addKey(bytes32 _key, uint256 _purpose, uint256 _keyType) public returns (bool success){
-        // require(canAddKey(), "No authority to add keys"); // or return false
+        //Todo or return false??
         require(!initialized|| keyHasPurpose(bytes32(msg.sender), 1), "No authority to add keys");
         require(_keyType != 0);
 
@@ -220,7 +222,6 @@ contract Passport is PassportInterface {
     {
         claimId = keccak256(issuer, _topic);
      
-        
         if(!keyHasPurpose(bytes32(msg.sender), 1)){
             emit ClaimRequested(claimId, _topic, _scheme, issuer, _signature, _data, _uri);
             return;

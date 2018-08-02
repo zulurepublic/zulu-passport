@@ -1,6 +1,6 @@
 pragma solidity 0.4.24;
 
-import "../Libary/BytesLib.sol";
+import "../lib/BytesLib.sol";
 import '../passport/PassportInterface.sol';
 import "zeppelin-solidity/contracts/ECRecovery.sol";
 import "../ERC165Query.sol";
