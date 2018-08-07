@@ -9,7 +9,6 @@ import "./PassportInterface.sol";
  */
 contract Passport is PassportInterface {
 
-// Todo Check user controlle is this the best way to do it?
     struct Claim {
         uint256 topic;
         uint256 scheme;
@@ -31,7 +30,12 @@ contract Passport is PassportInterface {
     mapping (bytes32 => Claim) claims;
     mapping (uint256 => bytes32[]) claimsByTopic;
 
-    
+    //Constants
+    uint constant IS_OWNER              = 1;
+    uint constant IS_MANAGER            = 2;
+    uint constant IS_CLAIM_MANANGER     = 3;
+    uint constant IS_CLAIM_SIGNER       = 4;
+    uint constant IS_SELF_CLAIM_MANAGER = 5;
 
     bool initialized = false;
 
@@ -99,9 +103,9 @@ contract Passport is PassportInterface {
         return c;
     }
 
+    
     function shiftPurpose(uint256 _purpose) internal pure returns(uint256){
         require(_purpose != 0);
-
         return shiftLeft(1, (_purpose-1));
     }
 
@@ -113,8 +117,8 @@ contract Passport is PassportInterface {
      * @return Boolen true on success
      */
     function addKey(bytes32 _key, uint256 _purpose, uint256 _keyType) public returns (bool success){
-        //Todo or return false??
-        require(!initialized|| keyHasPurpose(bytes32(msg.sender), 1), "No authority to add keys");
+        require(keyHasPurpose(bytes32(msg.sender), 2), "No authority to add keys");
+        require(_purpose != 1, "Can not add new owner");
         require(_keyType != 0);
 
         uint256 shiftedPurpose = shiftPurpose(_purpose);
@@ -126,7 +130,6 @@ contract Passport is PassportInterface {
             keys[_key].keyType = _keyType;
             keysByPurpose[_purpose].push(_key);
             keys[_key].purpose = shiftedPurpose; 
-
         }
         else{
             if((keys[_key].purpose & shiftedPurpose) == 0){
@@ -135,11 +138,6 @@ contract Passport is PassportInterface {
             }
         }
         emit KeyAdded(_key, _purpose, _keyType);
-
-        //Add new _purpose
-        // https://medium.com/@imolfar/bitwise-operations-and-bit-manipulation-in-solidity-ethereum-1751f3d2e216
-
-        // keys[_key].purposes.push(_purpose);
         return true;
     }
 
@@ -150,19 +148,24 @@ contract Passport is PassportInterface {
      * @return Boolen true on success
      */
     function removeKey(bytes32 _key, uint256 _purpose) public returns (bool success){
-        require(keyHasPurpose(bytes32(msg.sender), 1), "No authority to remove keys");
-        // require(canRemoveKey(), "No authority to remove keys"); // or return false
+        require(keyHasPurpose(bytes32(msg.sender), 2), "No authority to remove keys");
+        //Todo can remove owner from other pruposes?
+        require(!keyHasPurpose(_key, 1), "Cant remove owner key");
 
         require(keys[_key].key == _key, "Key does not exist and cant be removed");
 
-
-        //remove _purpose
+        //remove purpose
         keys[_key].purpose = ~shiftPurpose(_purpose) & keys[_key].purpose;
 
         //Look for key in keysByPurpose
+        
         for (uint i = 0; i < keysByPurpose[_purpose].length; i++) {
             if (keysByPurpose[_purpose][i] == _key) {
-                delete keysByPurpose[_purpose][i];
+                keysByPurpose[_purpose][i] = keysByPurpose[_purpose][keysByPurpose[_purpose].length-1];
+                
+                keysByPurpose[_purpose].length--;
+                emit KeyRemoved(keys[_key].key, _purpose, keys[_key].keyType);
+                return true;     
             }
         }
 
@@ -222,9 +225,9 @@ contract Passport is PassportInterface {
     {
         claimId = keccak256(issuer, _topic);
      
-        if(!keyHasPurpose(bytes32(msg.sender), 1)){
+        if(!keyHasPurpose(bytes32(msg.sender), 3)){
             emit ClaimRequested(claimId, _topic, _scheme, issuer, _signature, _data, _uri);
-            return;
+            return claimId;
         }
 
         claimsByTopic[_topic].push(claimId);
@@ -236,8 +239,7 @@ contract Passport is PassportInterface {
         claims[claimId].uri = _uri;
 
         emit ClaimAdded(claimId, _topic, _scheme, issuer, _signature, _data, _uri);
-
-        //TODO What to return ?? no execute anymore
+        return claimId;
     }
 
     /**
@@ -246,13 +248,10 @@ contract Passport is PassportInterface {
      * @return Boolean true on success
      */
     function removeClaim(bytes32 _claimId) public returns (bool success){
-        require(canRemoveClaim(), "No authority to remove claims");
+        require(keyHasPurpose(bytes32(msg.sender), 3), "No authority to remove claims");
         if(claims[_claimId].issuer != address(0)){
             delete claims[_claimId];
         }
         return true;
-    }
-    function canRemoveClaim() internal returns (bool){
-        return keyHasPurpose(bytes32(msg.sender), 1);
     }
 }

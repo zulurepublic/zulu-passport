@@ -15,7 +15,7 @@ const expect = require("chai").expect;
 
 contract(
     "Passport",
-    ([user, citizen1, citizen2, issuerZulu ]) => {
+    ([user, citizen1, citizen2, issuerZulu, prupose3, prupose2, prupose4, prupose5 ]) => {
     let passportCloneFactory, passport, passportHelper;
     const data = "test data";
     const topic = 99;
@@ -33,6 +33,14 @@ contract(
             data );
     
         signedClaim = web3.eth.sign(issuerZulu, testClaimToSign);
+        let byteAddr = await passportHelper.addressToBytes32(prupose2);
+        await passport.addKey(byteAddr, 2, 1, {from: citizen1});
+        byteAddr = await passportHelper.addressToBytes32(prupose3);
+        await passport.addKey(byteAddr, 3, 1, {from: citizen1});
+        byteAddr = await passportHelper.addressToBytes32(prupose4);
+        await passport.addKey(byteAddr, 4, 1, {from: citizen1});
+        byteAddr = await passportHelper.addressToBytes32(prupose5);
+        await passport.addKey(byteAddr, 5, 1, {from: citizen1});
     });
 
 
@@ -96,8 +104,6 @@ contract(
             (await passport.keyHasPurpose(key, 3)).should.be.true;
             (await passport.keyHasPurpose(key, 4)).should.be.true;
             (await passport.keyHasPurpose(key, 5)).should.be.true;
-
-
         });
         it("should return false fo INVALID purposes", async () => {
             const key = await passportHelper.addressToBytes32(citizen2);
@@ -117,9 +123,9 @@ contract(
             const keys = await passport.getKeysByPurpose(1);
             keys.should.be.eql([key]);
             const keys2 = await passport.getKeysByPurpose(2);
-            keys2.should.be.eql([key]);
+            keys2.should.be.eql([key, await passportHelper.addressToBytes32(prupose2)]);
             const keys3 = await passport.getKeysByPurpose(3);
-            keys3.should.be.eql([key]);
+            keys3.should.be.eql([key, await passportHelper.addressToBytes32(prupose3)]);
         });
         it("should return empty for purpose without key", async () => {
             const key = await passportHelper.addressToBytes32(citizen1);
@@ -137,68 +143,87 @@ contract(
     describe("#addKey", () => {
         it("should add a key that is new", async () => {
             const byteAddr = await passportHelper.addressToBytes32(citizen2);
-            (await passport.keyHasPurpose(byteAddr, 1)).should.be.false;
-            await passport.addKey(byteAddr, 1, 1, {from: citizen1});
-            (await passport.keyHasPurpose(byteAddr, 1)).should.be.true;
+            (await passport.keyHasPurpose(byteAddr, 2)).should.be.false;
+            await passport.addKey(byteAddr, 2, 1, {from: prupose2});
+            (await passport.keyHasPurpose(byteAddr, 2)).should.be.true;
         });
         it("should add a keys new purpose", async () => {
             const byteAddr = await passportHelper.addressToBytes32(citizen2);
-            await passport.addKey(byteAddr, 1, 1, {from: citizen1});
-            (await passport.keyHasPurpose(byteAddr, 1)).should.be.true;
-            (await passport.keyHasPurpose(byteAddr, 2)).should.be.false;
-            await passport.addKey(byteAddr, 2, 1, {from: citizen1});
+            await passport.addKey(byteAddr, 2, 1, {from: prupose2});
             (await passport.keyHasPurpose(byteAddr, 2)).should.be.true;
+            (await passport.keyHasPurpose(byteAddr, 3)).should.be.false;
+            await passport.addKey(byteAddr, 3, 1, {from: prupose2});
+            (await passport.keyHasPurpose(byteAddr, 3)).should.be.true;
         });
         it("should not change a key that already exists", async () => {
             const byteAddr = await passportHelper.addressToBytes32(citizen2);
 
-            await passport.addKey(byteAddr, 3, 1, {from: citizen1});
+            await passport.addKey(byteAddr, 3, 1, {from: prupose2});
             (await passport.keyHasPurpose(byteAddr, 3)).should.be.true;
             let keyData = await passport.getKey(byteAddr);
 
-            await passport.addKey(byteAddr, 3, 1, {from: citizen1});
+            await passport.addKey(byteAddr, 3, 1, {from: prupose2});
             (await passport.keyHasPurpose(byteAddr, 3)).should.be.true;
             keyData.should.be.deep.eq(await passport.getKey(byteAddr))
 
         });
-        it("should revert for user without purpose 1", async () => {
+        it("should revert for user without purpose 2", async () => {
             const byteAddr = await passportHelper.addressToBytes32(citizen2);
-            await assertRevert( passport.addKey(byteAddr, 5, 1, { from: citizen2 }));
+            await assertRevert( passport.addKey(byteAddr, 5, 1, { from: prupose3 }));
         });
+        it("should Not add key of purpose 1", async () => {
+            const byteAddr = await passportHelper.addressToBytes32(citizen2);
+            await assertRevert( passport.addKey(byteAddr, 1, 1, { from: prupose2 }));
+        });
+
     });
     describe("#removeKey", () => {
-        it("should remove an existing key for user with purpose 1", async () => {
-            const byteAddr = await passportHelper.addressToBytes32(citizen1);
+        it.only("should remove an existing key for user with purpose 2", async () => {
+            const byteAddr = await passportHelper.addressToBytes32(citizen2);
+            await passport.addKey(byteAddr, 3, 1, {from: prupose2});
             (await passport.keyHasPurpose(byteAddr, 3)).should.be.true;
-            await passport.removeKey(byteAddr, 3, {from: citizen1});
+            await passport.removeKey(byteAddr, 3, {from: prupose2});
             (await passport.keyHasPurpose(byteAddr, 3)).should.be.false;
             const keys = await passport.getKeysByPurpose(3);
-            keys.should.be.eql(["0x0000000000000000000000000000000000000000000000000000000000000000"]);
+            keys.should.be.eql([await passportHelper.addressToBytes32(citizen1), await passportHelper.addressToBytes32(prupose3) ]);
         });
         it("should revert when trying to remove key that does not exist", async () => {
             const byteAddr = await passportHelper.addressToBytes32(citizen2);
 
             (await passport.keyHasPurpose(byteAddr, 3)).should.be.false;
-            await assertRevert( passport.removeKey(byteAddr, 3, {from: citizen1}));
+            await assertRevert( passport.removeKey(byteAddr, 3, {from: prupose2}));
         });
-        it("should Not remove an existing key for user without purpose 1", async () => {
+        it.only("should Not remove an existing key for user without purpose 2", async () => {
             const byteAddr = await passportHelper.addressToBytes32(citizen1);
             (await passport.keyHasPurpose(byteAddr, 3)).should.be.true;
             await assertRevert(passport.removeKey(byteAddr, 3, {from: citizen2}));
             (await passport.keyHasPurpose(byteAddr, 3)).should.be.true;
             const keys = await passport.getKeysByPurpose(3);
-            keys.should.be.eql([byteAddr]);
+            keys.should.be.eql([byteAddr, await passportHelper.addressToBytes32(prupose3)]);
         });
-
+        it("should Not remove key of purpose 1", async () => {
+            const byteAddr = await passportHelper.addressToBytes32(citizen1);
+            await assertRevert( passport.removeKey(byteAddr, 1, {from: prupose2}));
+        });
+        it("should remove last key in list", async () => {
+            const byteAddr = await passportHelper.addressToBytes32(citizen2);
+            const byteAddr2 = await passportHelper.addressToBytes32(prupose3);
+            await passport.addKey(byteAddr, 3, 1, {from: prupose2});
+            (await passport.keyHasPurpose(byteAddr2, 3)).should.be.true;
+            await passport.removeKey(byteAddr2, 3, {from: prupose2});
+            (await passport.keyHasPurpose(byteAddr2, 3)).should.be.false;
+            const keys = await passport.getKeysByPurpose(3);
+            keys.should.be.eql([await passportHelper.addressToBytes32(citizen1), byteAddr]);
+        });
     });
 
     // Claim
     describe("getClaim", () => {
         beforeEach(async () => {
-          await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: citizen1});
+          await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: prupose3});
         });
         it("should get claim by claimID", async () => {
-          testClaim(passport, topic, issuerZulu, signedClaim, data, uri)
+          testClaim(passport, topic, issuerZulu, signedClaim, data, uri);
         });
         it("should get empty data for claim that does not exist", async () => {
           let claimId = keccak256(issuerZulu, 4);
@@ -215,7 +240,7 @@ contract(
 
     describe("#getClaimIdsByTopic", () => {
         beforeEach(async () => {
-          await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: citizen1});
+          await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: prupose3});
 
         });
         it("should get existing claims for a topic that exists", async () => {
@@ -230,15 +255,16 @@ contract(
           claims.should.be.eql([]);
         });
     });
+
     describe("#addClaim", () => {
-        it("should add a claim for key of purpose 1", async () => {
-          await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: citizen1})
+        it("should add a claim for key of purpose 3", async () => {
+          await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: prupose3})
                             .should.be.fulfilled;
           testClaim(passport, topic, issuerZulu, signedClaim, data, uri)
 
         });
-        it("should NOT add a claim for key not of purpose 1", async () => {
-          await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: citizen2});  
+        it("should NOT add a claim for key not of purpose 3", async () => {
+          await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: prupose2});  
           let claimId = keccak256(issuerZulu, topic);
           
           testEmptyClaim(passport, claimId)
@@ -246,21 +272,19 @@ contract(
     });
     describe("#removeClaim", () => {
         beforeEach(async () => {
-          await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: citizen1});
+          await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: prupose3});
         });
-        it("should remove an existing claim by user with purpose 1", async () => {
+        it("should remove an existing claim by user with purpose 3", async () => {
           let claimId = keccak256(issuerZulu, topic);
 
-          await passport.removeClaim(claimId, {from: citizen1}).should.be.fulfilled;
+          await passport.removeClaim(claimId, {from: prupose3}).should.be.fulfilled;
           testEmptyClaim(passport, claimId)
-
         });
-        it("should NOT remove an existing claim for user WITHOUT purpose 1", async () => {
+        it("should NOT remove an existing claim for user WITHOUT purpose 3", async () => {
           let claimId = keccak256(issuerZulu, topic);
-
-          await passport.removeClaim(claimId, {from: citizen2}).should.be.rejectedWith('revert');  
+          await passport.removeClaim(claimId, {from: prupose2}).should.be.rejectedWith('revert');  
         });
-
+        
     });
 
 });
