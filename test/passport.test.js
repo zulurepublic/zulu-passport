@@ -178,7 +178,7 @@ contract(
 
     });
     describe("#removeKey", () => {
-        it.only("should remove an existing key for user with purpose 2", async () => {
+        it("should remove an existing key for user with purpose 2", async () => {
             const byteAddr = await passportHelper.addressToBytes32(citizen2);
             await passport.addKey(byteAddr, 3, 1, {from: prupose2});
             (await passport.keyHasPurpose(byteAddr, 3)).should.be.true;
@@ -193,7 +193,7 @@ contract(
             (await passport.keyHasPurpose(byteAddr, 3)).should.be.false;
             await assertRevert( passport.removeKey(byteAddr, 3, {from: prupose2}));
         });
-        it.only("should Not remove an existing key for user without purpose 2", async () => {
+        it("should Not remove an existing key for user without purpose 2", async () => {
             const byteAddr = await passportHelper.addressToBytes32(citizen1);
             (await passport.keyHasPurpose(byteAddr, 3)).should.be.true;
             await assertRevert(passport.removeKey(byteAddr, 3, {from: citizen2}));
