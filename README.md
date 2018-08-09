@@ -14,14 +14,27 @@
 -   [Test Coverage](#test-coverage)
 -   [Generate Flattened Contracts](#generate-flattened-contracts)
 
-## Overview
+## 1. What is Zulu-Passport?
 
-This is the Zulu Republic passport repository. It tries to solve the question of how a person/institute is able to claim or verify the identity of another person in a secure fashion as well as respecting that person's rights to govern herself.
+Zulu-Passport is an implementation of a self-sovereign identity management system in solidity. It allows the passport owner to manage claims made about him and sharing them with third-parties. 
 
-Along with the passport comes the `passportCloneFactory` which makes deploying new passports cheaper then to deploy them individually. It also stores the owner address of the passport for conveniently looking it up at a later time.
-The last contract is the `ClaimVerifier` that is used to verify whether a claim is true.
+**What is a claim?**
 
-## Implementation Details
+Let's have a look at a real-world example, your real-world passport. 
+Your passport is a document issued by a government identifying you and claiming that you belong to there country. Another example is your education, that is represented by a certificate issued by a school or university that claims your scholarship. You can see the pattern: Issuer claims something over receiving identity.
+
+This is what the Zulu-Passport is trying to bring to the blockchain, secured with Public-key cryptography. A claim is defined by a topic, the public key of the receiving identity, and the data that belongs to the claim. This is then signed with the private key of the issuer. By that people know that only the private key owner can be the issuer of that claim. 
+
+**But what does self-sovereign mean?**
+
+In many cases in the real world, claims are made without the consent of the recipient. On the other hand, claims that the recipient wants to be shared can't be shared because of legal obligations. 
+That is why Zulu gives each person the possibility to govern their identity themselves, by letting them freely choose witch claims the add to there Passport. 
+
+## 2. How is it working?
+
+Part of the Zulu-Passport Repository is for once the passport itself.
+Along with it comes the `passportCloneFactory` which makes deploying new passports cheaper then to deploy them individually. It also stores the owner address of the passport for conveniently looking it up at a later time.
+The last interesting contract is the `ClaimVerifier` that can be used to verify whether a claim is true. 
 
 ### Passport
 
