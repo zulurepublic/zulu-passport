@@ -7,6 +7,8 @@
 -   [Table of Contents](#table-of-contents)
 -   [Overview](#overview)
 -   [Implementation Details](#implementation-details)
+-   [Licensing](#licensing)
+-   [Learn More](#learn-more)
 -   [Development](#development)
 -   [Setting Up](#setting-up)
 -   [Running Tests](#running-tests)
@@ -41,6 +43,18 @@ Claims have the topic, scheme, issuer, signature, data, and uri as attributes. T
 -   `signature` is the signed keccak256(abi.encode(passportAddress, topic, data)) by issuer.
 -   `data` is data that the issuer wants to be part of the claim. This can be used to make information public, give general information, or encrypted data. This should be used in a way that fits the use case for which the claim is being used.
 -   `uri`, the location of the claim, this can be HTTP links, swarm hashes, IPFS hashes, and such. (this can be changed by identity ad will so should not be used for necessary data).
+
+## Licensing
+
+Lite.IM is licensed under the [Creative Commons Attribution ShareAlike](https://creativecommons.org/licenses/by-sa/4.0/) (CC-BY-SA-4.0) license. This means you are free to share or adapt it in any way.
+
+## Learn More
+
+To learn more about Zulu Republic, visit the [Zulu Republic website](https://www.zulurepublic.io/) and [blog](www.medium.com/zulurepublic).
+
+The Zulu Republic Telegram community can be found [here](https://t.me/ztxrepublic).
+
+Follow Zulu Republic on Twitter at [@ztxrepublic](www.twitter.com/ztxrepublic).
 
 ## Development
 
