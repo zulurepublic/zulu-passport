@@ -12,7 +12,7 @@ contract Passport is PassportInterface {
     struct Claim {
         uint256 topic;
         uint256 scheme;
-        address issuer; 
+        address issuer;
         bytes signature;
         bytes data;
         string uri;
@@ -55,7 +55,7 @@ contract Passport is PassportInterface {
         keysByPurpose[4].push(bytes32(sender));
         keysByPurpose[5].push(bytes32(sender));
 
-        keys[bytes32(sender)].purpose = 31; 
+        keys[bytes32(sender)].purpose = 31;
 
         supportedInterfaces[ERC165ID()] = true;
         supportedInterfaces[PassportInterfaceID()] = true;
@@ -71,7 +71,7 @@ contract Passport is PassportInterface {
     function getKey(bytes32 _key) public view returns(uint256 purpose, uint256 keyType, bytes32 key){
         return (keys[_key].purpose, keys[_key].keyType, keys[_key].key);
     }
- 
+
     /**
      * @dev Checks if key with purpose exist
      * @param _key bytes32 of the key
@@ -85,7 +85,7 @@ contract Passport is PassportInterface {
             return true;
         }
 
-        return false;    
+        return false;
     }
 
     /**
@@ -93,7 +93,7 @@ contract Passport is PassportInterface {
      * @param _purpose uint256 of the purpose
      * @return List of keys
      */
-    function getKeysByPurpose(uint256 _purpose) public view returns(bytes32[] keys){
+    function getKeysByPurpose(uint256 _purpose) public view returns(bytes32[]) {
         return keysByPurpose[_purpose];
     }
 
@@ -103,8 +103,7 @@ contract Passport is PassportInterface {
         return c;
     }
 
-    
-    function shiftPurpose(uint256 _purpose) internal pure returns(uint256){
+    function shiftPurpose(uint256 _purpose) internal pure returns(uint256) {
         require(_purpose != 0);
         return shiftLeft(1, (_purpose-1));
     }
@@ -116,27 +115,27 @@ contract Passport is PassportInterface {
      * @param _keyType uint256 of the keyType
      * @return Boolen true on success
      */
-    function addKey(bytes32 _key, uint256 _purpose, uint256 _keyType) public returns (bool success){
+    function addKey(bytes32 _key, uint256 _purpose, uint256 _keyType) public returns (bool success) {
         require(keyHasPurpose(bytes32(msg.sender), 2), "No authority to add keys");
         require(_purpose != 1, "Can not add new owner");
         require(_keyType != 0);
 
         uint256 shiftedPurpose = shiftPurpose(_purpose);
- 
+
         //Key exists?
-        if(keys[_key].key != _key){
+        if (keys[_key].key != _key) {
             //Add to keys
             keys[_key].key = _key;
             keys[_key].keyType = _keyType;
             keysByPurpose[_purpose].push(_key);
-            keys[_key].purpose = shiftedPurpose; 
-        }
-        else{
-            if((keys[_key].purpose & shiftedPurpose) == 0){
+            keys[_key].purpose = shiftedPurpose;
+        } else {
+            if ((keys[_key].purpose & shiftedPurpose) == 0) {
                 keysByPurpose[_purpose].push(_key);
-                keys[_key].purpose = keys[_key].purpose | shiftedPurpose; 
+                keys[_key].purpose = keys[_key].purpose | shiftedPurpose;
             }
         }
+
         emit KeyAdded(_key, _purpose, _keyType);
         return true;
     }
@@ -147,7 +146,7 @@ contract Passport is PassportInterface {
      * @param _purpose uint256 of the purpose
      * @return Boolen true on success
      */
-    function removeKey(bytes32 _key, uint256 _purpose) public returns (bool success){
+    function removeKey(bytes32 _key, uint256 _purpose) public returns (bool success) {
         require(keyHasPurpose(bytes32(msg.sender), 2), "No authority to remove keys");
         //Todo can remove owner from other pruposes?
         require(!keyHasPurpose(_key, 1), "Cant remove owner key");
@@ -158,14 +157,14 @@ contract Passport is PassportInterface {
         keys[_key].purpose = ~shiftPurpose(_purpose) & keys[_key].purpose;
 
         //Look for key in keysByPurpose
-        
+
         for (uint i = 0; i < keysByPurpose[_purpose].length; i++) {
             if (keysByPurpose[_purpose][i] == _key) {
                 keysByPurpose[_purpose][i] = keysByPurpose[_purpose][keysByPurpose[_purpose].length-1];
-                
+
                 keysByPurpose[_purpose].length--;
                 emit KeyRemoved(keys[_key].key, _purpose, keys[_key].keyType);
-                return true;     
+                return true;
             }
         }
 
@@ -178,9 +177,9 @@ contract Passport is PassportInterface {
      * @param _claimId bytes32 of the claimId
      * @return topic, scheme, issuer, signature, data, and uri of a claim
      */
-    function getClaim(bytes32 _claimId) 
-        public 
-        view 
+    function getClaim(bytes32 _claimId)
+        public
+        view
         returns(uint256 topic, uint256 scheme, address issuer, bytes signature, bytes data, string uri)
     {
         return (
@@ -194,7 +193,7 @@ contract Passport is PassportInterface {
     }
 
     /**
-     * @dev Getter for claims of topic 
+     * @dev Getter for claims of topic
      * @param _topic uint256 of the topic
      * @return claimIds of a claims
      */
@@ -213,18 +212,18 @@ contract Passport is PassportInterface {
      * @return claimIds of a claims
      */
     function addClaim(
-        uint256 _topic, 
-        uint256 _scheme, 
-        address issuer, 
-        bytes _signature, 
-        bytes _data, 
+        uint256 _topic,
+        uint256 _scheme,
+        address issuer,
+        bytes _signature,
+        bytes _data,
         string _uri
         )
-        public 
+        public
         returns (bytes32 claimId)
     {
-        claimId = keccak256(issuer, _topic);
-     
+        claimId = keccak256(abi.encodePacked(issuer, _topic));
+
         if(!keyHasPurpose(bytes32(msg.sender), 3)){
             emit ClaimRequested(claimId, _topic, _scheme, issuer, _signature, _data, _uri);
             return claimId;
