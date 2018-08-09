@@ -17,7 +17,14 @@ This is what the Zulu-Passport is trying to bring to the blockchain, secured wit
 In many cases in the real world, claims are made without the consent of the recipient. On the other hand, claims that the recipient wants to be shared can't be shared because of legal obligations. 
 That is why Zulu gives each person the possibility to govern their identity themselves, by letting them freely choose witch claims the add to there Passport. 
 
-## 2. How is it working?
+
+## 2. What are real-world use cases? 
+
+A first use case will be for Zulu Republic. We will sign a claim that makes a passport owner a valid Zulu-Citizens, as long as he fulfills the requirements.  People that hold that claim get then special right on the Zulu platform. 
+
+Another use case could be KVC. A firm that validates customer data could give their customers a signed claim that they did KVC. This could then used for multiple applications that need KVC, instead of doing KVC for each one separately.
+
+## 3. How is it working?
 
 Part of the Zulu-Passport Repository is for once the passport itself.
 Along with it comes the `passportCloneFactory` which makes deploying new passports cheaper then to deploy them individually. It also stores the owner address of the passport for conveniently looking it up at a later time.
@@ -43,13 +50,13 @@ Claims have the topic, scheme, issuer, signature, data, and uri as attributes. T
 -   `data` is data that the issuer wants to be part of the claim. This can be used to make information public, give general information, or encrypted data. This should be used in a way that fits the use case for which the claim is being used.
 -   `uri`, the location of the claim, this can be HTTP links, swarm hashes, IPFS hashes, and such. (this can be changed by identity ad will so should not be used for necessary data).
 
-## 3. Development
+## 4. Development
 
 **Dependencies**
 
 -   `node@9.5.x`
 
-## 4. Setting Up
+## 5. Setting Up
 
 -   Clone this repository.
 
@@ -61,11 +68,11 @@ Claims have the topic, scheme, issuer, signature, data, and uri as attributes. T
 
     -   `node_modules/.bin/truffle compile`
 
-## 5. Running Tests
+## 6. Running Tests
 
 -   `npm run test`
 
-## 6. Test Coverage
+## 7. Test Coverage
 
 To generate test coverage, type:
 
@@ -73,7 +80,7 @@ To generate test coverage, type:
 
 To see test coverage open `coverage/index.html` in a browser.
 
-## 7. Generate Flattened Contracts
+## 8. Generate Flattened Contracts
 
 To generate flattened version of contracts in `flats/`, type:
 
@@ -83,11 +90,11 @@ To generate flatten version of contracts and serve them to remix, type:
 
 -   `npm run remix`
 
-## 8. Licensing
+## 9. Licensing
 
 Lite.IM is licensed under the [Creative Commons Attribution ShareAlike](https://creativecommons.org/licenses/by-sa/4.0/) (CC-BY-SA-4.0) license. This means you are free to share or adapt it in any way.
 
-## 9. Learn More
+## 10. Learn More
 
 To learn more about Zulu Republic, visit the [Zulu Republic website](https://www.zulurepublic.io/) and [blog](www.medium.com/zulurepublic).
 
