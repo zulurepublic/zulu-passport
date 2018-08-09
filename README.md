@@ -1,6 +1,5 @@
 # Zulu Republic Passport
-
-![Zulu Republic](zulu-icon.png)
+<img src="zulu-icon.png" width="250" height="250">
 
 ## Table of Contents
 
