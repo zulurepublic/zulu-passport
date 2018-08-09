@@ -3,7 +3,7 @@
 
 ## 1. What is Zulu-Passport?
 
-Zulu-Passport is an implementation of a self-sovereign identity management system in solidity. It allows the passport owner to manage claims made about him and sharing them with third-parties. 
+Zulu-Passport is an implementation of a self-sovereign identity management system in solidity. It allows the passport owner to manage claims and sharing them with third-parties. 
 
 **What is a claim?**
 
