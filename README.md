@@ -24,11 +24,14 @@ A first use case will be for Zulu Republic. We will sign a claim that makes a pa
 
 Another use case could be KVC. A firm that validates customer data could give their customers a signed claim that they did KVC. This could then used for multiple applications that need KVC, instead of doing KVC for each one separately.
 
-## 3. How is it working?
+## 3. How is it working and how to use it?
 
 Part of the Zulu-Passport Repository is for once the passport itself.
 Along with it comes the `passportCloneFactory` which makes deploying new passports cheaper then to deploy them individually. It also stores the owner address of the passport for conveniently looking it up at a later time.
-The last interesting contract is the `ClaimVerifier` that can be used to verify whether a claim is true. 
+
+To create a passport for an address call the createPassport function on `passportCloneFactory` that is deployed at ...(Todo deploy). This will give you a deployed passport on .. (Todo network it is deployed on) network. 
+
+The last interesting contract is the `ClaimVerifier` that can be used to verify whether a claim is true. It can be used in contracts to inherit from that need to check if claims are valid. Therefore the claimIsValid or claimAndDataIsValid functions can be used. 
 
 ### Passport
 
@@ -50,13 +53,15 @@ Claims have the topic, scheme, issuer, signature, data, and uri as attributes. T
 -   `data` is data that the issuer wants to be part of the claim. This can be used to make information public, give general information, or encrypted data. This should be used in a way that fits the use case for which the claim is being used.
 -   `uri`, the location of the claim, this can be HTTP links, swarm hashes, IPFS hashes, and such. (this can be changed by identity ad will so should not be used for necessary data).
 
+(Todo generate documentation??)
+
 ## 4. Development
 
 **Dependencies**
 
 -   `node@9.5.x`
 
-## 5. Setting Up
+**Setting Up**
 
 -   Clone this repository.
 
@@ -68,11 +73,11 @@ Claims have the topic, scheme, issuer, signature, data, and uri as attributes. T
 
     -   `node_modules/.bin/truffle compile`
 
-## 6. Running Tests
+**Running Tests**
 
 -   `npm run test`
 
-## 7. Test Coverage
+**Test Coverage**
 
 To generate test coverage, type:
 
@@ -80,7 +85,7 @@ To generate test coverage, type:
 
 To see test coverage open `coverage/index.html` in a browser.
 
-## 8. Generate Flattened Contracts
+**Generate Flattened Contracts**
 
 To generate flattened version of contracts in `flats/`, type:
 
@@ -90,11 +95,11 @@ To generate flatten version of contracts and serve them to remix, type:
 
 -   `npm run remix`
 
-## 9. Licensing
+## 5. Licensing
 
 Zulu-Passport is licensed under the [GNU AFFERO GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/agpl-3.0.en.html) (agpl-3.0) license. 
 
-## 10. Learn More
+## 6. Learn More
 
 To learn more about Zulu Republic, visit the [Zulu Republic website](https://www.zulurepublic.io/) and [blog](www.medium.com/zulurepublic).
 
