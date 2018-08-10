@@ -51,7 +51,7 @@ Claims have the topic, scheme, issuer, signature, data, and uri as attributes. T
 -   `data` is data that the issuer wants to be part of the claim. This can be used to make information public, give general information, or encrypted data. This should be used in a way that fits the use case for which the claim is being used.
 -   `uri`, the location of the claim, this can be HTTP links, swarm hashes, IPFS hashes, and such. (this can be changed by identity ad will so should not be used for necessary data).
 
-(Todo generate documentation??)
+[Documentation](https://github.com/zulurepublic/zulu-passport/wiki/api_passport_Passport)
 
 ## 4. How to use it?
 
