@@ -92,7 +92,7 @@ To generate flatten version of contracts and serve them to remix, type:
 
 ## 9. Licensing
 
-Lite.IM is licensed under the [Creative Commons Attribution ShareAlike](https://creativecommons.org/licenses/by-sa/4.0/) (CC-BY-SA-4.0) license. This means you are free to share or adapt it in any way.
+Zulu-Passport is licensed under the [GNU AFFERO GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/agpl-3.0.en.html) (agpl-3.0) license. 
 
 ## 10. Learn More
 
