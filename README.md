@@ -24,12 +24,10 @@ A first use case will be for Zulu Republic. We will sign a claim that makes a pa
 
 Another use case could be KVC. A firm that validates customer data could give their customers a signed claim that they did KVC. This could then used for multiple applications that need KVC, instead of doing KVC for each one separately.
 
-## 3. How is it working and how to use it?
+## 3. How is it working?
 
 Part of the Zulu-Passport Repository is for once the passport itself.
 Along with it comes the `passportCloneFactory` which makes deploying new passports cheaper then to deploy them individually. It also stores the owner address of the passport for conveniently looking it up at a later time.
-
-To create a passport for an address call the createPassport function on `passportCloneFactory` that is deployed at ...(Todo deploy). This will give you a deployed passport on .. (Todo network it is deployed on) network. 
 
 The last interesting contract is the `ClaimVerifier` that can be used to verify whether a claim is true. It can be used in contracts to inherit from that need to check if claims are valid. Therefore the claimIsValid or claimAndDataIsValid functions can be used. 
 
@@ -54,6 +52,10 @@ Claims have the topic, scheme, issuer, signature, data, and uri as attributes. T
 -   `uri`, the location of the claim, this can be HTTP links, swarm hashes, IPFS hashes, and such. (this can be changed by identity ad will so should not be used for necessary data).
 
 (Todo generate documentation??)
+
+## 4. How to use it?
+
+To create a passport for an address call the createPassport function on `passportCloneFactory` that is deployed at ...(Todo deploy) needs to be called. This will give you a deployed passport on .. (Todo network it is deployed on) network. With that contract, you then can use all the functionality described.
 
 ## 4. Development
 
