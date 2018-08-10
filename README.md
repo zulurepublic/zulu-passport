@@ -57,7 +57,7 @@ Claims have the topic, scheme, issuer, signature, data, and uri as attributes. T
 
 To create a passport for an address call the createPassport function on `passportCloneFactory` that is deployed at ...(Todo deploy) needs to be called. This will give you a deployed passport on .. (Todo network it is deployed on) network. With that contract, you then can use all the functionality described.
 
-## 4. Development
+## 5. Development
 
 **Dependencies**
 
@@ -97,11 +97,11 @@ To generate flatten version of contracts and serve them to remix, type:
 
 -   `npm run remix`
 
-## 5. Licensing
+## 6. Licensing
 
 Zulu-Passport is licensed under the [GNU AFFERO GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/agpl-3.0.en.html) (agpl-3.0) license. 
 
-## 6. Learn More
+## 7. Learn More
 
 To learn more about Zulu Republic, visit the [Zulu Republic website](https://www.zulurepublic.io/) and [blog](www.medium.com/zulurepublic).
 
