@@ -10,6 +10,7 @@ Zulu-Passport is an implementation of a self-sovereign identity management syste
 
 Let's have a look at a real-world example, your real-world passport. 
 Your passport is a document issued by a government identifying you and claiming that you belong to that country. Another example is in education, where a degree certificate is issued to function as a claim that you have completed your studies. You can see the pattern: the issuer claims something about the receiving identity.
+
 This is what the Zulu Passport is trying to bring to the blockchain, secured with Public-key cryptography. A claim is defined by a topic, the public key of the receiving identity, and the data that belongs to the claim. This is then signed with the private key of the issuer to demonstrate the validity of the claim. 
 
 **But what does self-sovereign mean?**
@@ -107,7 +108,9 @@ To see test coverage open `coverage/index.html` in a browser.
 
 To generate flattened version of contracts in `flats/`, type:
 -   `npm run flat`
+
 To generate flatten version of contracts and serve them to remix, type:
+
 -   `npm run remix`
 
 ## 6. Licensing
