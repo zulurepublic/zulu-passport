@@ -130,11 +130,3 @@ Currently the Zulu Republic Foundation is developing an ecosystem of platforms o
 ## 7. Learn More
 
 To learn more about Zulu Republic, visit the [Zulu Republic website](https://www.zulurepublic.io/), [blog](www.medium.com/zulurepublic), and on Twitter at [@ztxrepublic](www.twitter.com/ztxrepublic).
-
-
-
-Collapse 
-
-Message Input
-
-Message danielesesta, Zach
