@@ -68,19 +68,15 @@ The following purposes of keys exist so far they all come with additional rights
 
 Claims have the topic, scheme, issuer, signature, data, and uri as attributes. These are explained in the following section.
 
--   `topic` is an uint256 were the number correlates to a topic. Topics could, for example, be KYC, Citizen of .., has a facebook account, ... **(Todo some standards should be defined to make claims more useful)**;
--   `scheme` is an uint256 were the number corresponds to the key signing method that is being used. 1 is here the ECDSA standard Ethereum uses and the only one implemented so far. **(Todo. Define more)**
--   `issuer` is the address of the issuer. **(todo is address always viable also for other signing methods?)**
+-   `topic` is an uint256 were the number correlates to a topic. Topics could, for example, be KYC, Citizen of .., has a facebook account, ...
+-   `scheme` is an uint256 were the number corresponds to the key signing method that is being used. 1 is here the ECDSA standard Ethereum uses and the only one implemented so far.
+-   `issuer` is the address of the issuer.
 -   `signature` is the signed keccak256(abi.encode(passportAddress, topic, data)) by issuer.
 -   `data` is data that the issuer wants to be part of the claim. This can be used to make information public, give general information, or encrypted data. This should be used in a way that fits the use case for which the claim is being used.
 -   `uri`, the location of the claim, this can be HTTP links, swarm hashes, IPFS hashes, and such. (this can be changed by identity at will so should not be used for necessary data).
 For more details on the functions of the passport see the [Documentation](https://github.com/zulurepublic/zulu-passport/wiki/).
 
-## 4. How to use it?
-
-To create a passport for an address call the createPassport function on `passportCloneFactory` that is deployed at ...**(Todo deploy)** needs to be called. This will give you a deployed passport on .. **(Todo network it is deployed on)** network. With that contract, you then can use all the functionality described.
-
-## 5. Development
+## 4. Development
 
 **Dependencies**
 
@@ -113,11 +109,11 @@ To generate flatten version of contracts and serve them to remix, type:
 
 -   `npm run remix`
 
-## 6. Licensing
+## 5. Licensing
 
 Zulu-Passport is licensed under the [GNU AFFERO GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/agpl-3.0.en.html) (agpl-3.0) license. 
 
-## 7. What is the Zulu Republic Foundation?
+## 6. What is the Zulu Republic Foundation?
 
 The Zulu Republic Foundation is a Swiss organization charged with managing the underlying technology of the Zulu Republic blockchain ecosystem. The foundation’s mission is to advance the development of decentralized technologies, to promote human rights and empowerment around the globe, and to reduce the global digital divide.
 
@@ -131,7 +127,7 @@ In support of this mission, the Zulu Republic Foundation is responsible for the 
 
 Currently the Zulu Republic Foundation is developing an ecosystem of platforms on the Ethereum blockchain, combining solutions for both self-sovereign identity (the Zulu Republic Passport) and economic agency (ZTX token and Zulu Pay financial platform).
 
-## 8. Learn More
+## 7. Learn More
 
 To learn more about Zulu Republic, visit the [Zulu Republic website](https://www.zulurepublic.io/), [blog](www.medium.com/zulurepublic), and on Twitter at [@ztxrepublic](www.twitter.com/ztxrepublic).
 
