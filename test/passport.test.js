@@ -241,14 +241,12 @@ contract(
     describe("#getClaimIdsByTopic", () => {
         beforeEach(async () => {
           await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: prupose3});
-
         });
         it("should get existing claims for a topic that exists", async () => {
           let claimId = keccak256(issuerZulu, topic);
 
           let claims = await passport.getClaimIdsByTopic(topic);
           [claimId].should.be.eql(claims);
-   
         });
         it("should get empty list when no claims of topic exist", async () => {
           let claims = await passport.getClaimIdsByTopic(4);
@@ -274,10 +272,13 @@ contract(
         beforeEach(async () => {
           await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: prupose3});
         });
-        it("should remove an existing claim by user with purpose 3", async () => {
+        it.only("should remove an existing claim by user with purpose 3", async () => {
           let claimId = keccak256(issuerZulu, topic);
-
+          let claims = await passport.getClaimIdsByTopic.call(topic);
+          let claimsLength = claims.length; 
           await passport.removeClaim(claimId, {from: prupose3}).should.be.fulfilled;
+          claimsLength.should.be.bignumber.eq( (await passport.getClaimIdsByTopic.call(topic)).length+1);
+
           testEmptyClaim(passport, claimId)
         });
         it("should NOT remove an existing claim for user WITHOUT purpose 3", async () => {

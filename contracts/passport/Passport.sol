@@ -229,8 +229,13 @@ contract Passport is PassportInterface {
             emit ClaimRequested(claimId, _topic, _scheme, issuer, _signature, _data, _uri);
             return claimId;
         }
+        if(claims[claimId].issuer == address(0)){
+            claimsByTopic[_topic].push(claimId);
+            emit ClaimAdded(claimId, _topic, _scheme, issuer, _signature, _data, _uri);
+        } else{
+            emit ClaimChanged(claimId, _topic, _scheme, issuer, _signature, _data, _uri);
+        }
 
-        claimsByTopic[_topic].push(claimId);
         claims[claimId].topic = _topic;
         claims[claimId].scheme = _scheme;
         claims[claimId].issuer = issuer;
@@ -238,7 +243,6 @@ contract Passport is PassportInterface {
         claims[claimId].data = _data;
         claims[claimId].uri = _uri;
 
-        emit ClaimAdded(claimId, _topic, _scheme, issuer, _signature, _data, _uri);
         return claimId;
     }
 
@@ -250,7 +254,16 @@ contract Passport is PassportInterface {
     function removeClaim(bytes32 _claimId) public returns (bool success){
         require(keyHasPurpose(bytes32(msg.sender), IS_CLAIM_MANAGER), "No authority to remove claims");
         if(claims[_claimId].issuer != address(0)){
+            uint256 topic = claims[_claimId].topic;
+
             delete claims[_claimId];
+            for (uint i = 0; i < claimsByTopic[topic].length; i++) {
+                if (claimsByTopic[topic][i] == _claimId) {
+                    claimsByTopic[topic][i] = claimsByTopic[topic][claimsByTopic[topic].length-1];
+                    claimsByTopic[topic].length--;
+                    return true;
+                }
+            }
         }
         return true;
     }
