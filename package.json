@@ -10,7 +10,7 @@
         "test": "bash scripts/run_test.sh",
         "cov": "bash scripts/coverage.sh",
         "flat": "bash scripts/flatten.sh",
-        "remix": "bash scripts/flatten.sh && ./node_modules/.bin/remixd -s ./flats"
+        "remix": "bash scripts/flatten.sh && remixd -s ./flats"
     },
     "repository": {
         "type": "git",
@@ -36,11 +36,11 @@
         "chai-bignumber": "^2.0.2",
         "ganache-cli": "^6.1.6",
         "left-pad": "^1.3.0",
-        "remixd": "^0.1.8-alpha.4",
         "rlp": "^2.1.0",
         "solidity-coverage": "^0.5.7",
         "truffle": "^4.1.13",
         "truffle-flattener": "^1.2.6",
         "zeppelin-solidity": "^1.12.0"
-    }
+    },
+    "dependencies": {}
 }

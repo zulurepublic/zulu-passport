@@ -110,6 +110,8 @@ To generate flattened version of contracts in `flats/`, type:
 
 To generate flatten version of contracts and serve them to remix, type:
 
+-   install `remixd` with `npm -g remixd`
+
 -   `npm run remix`
 
 ## 5. Licensing
