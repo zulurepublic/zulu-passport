@@ -32,8 +32,8 @@ contract Passport is PassportInterface {
 
     //Constants
     uint constant IS_OWNER              = 1;
-    uint constant IS_MANAGER            = 2;
-    uint constant IS_CLAIM_MANANGER     = 3;
+    uint constant IS_KEY_MANAGER        = 2;
+    uint constant IS_CLAIM_MANAGER      = 3;
     uint constant IS_CLAIM_SIGNER       = 4;
     uint constant IS_SELF_CLAIM_MANAGER = 5;
 
@@ -117,7 +117,7 @@ contract Passport is PassportInterface {
      * @return Boolen true on success
      */
     function addKey(bytes32 _key, uint256 _purpose, uint256 _keyType) public returns (bool success){
-        require(keyHasPurpose(bytes32(msg.sender), 2), "No authority to add keys");
+        require(keyHasPurpose(bytes32(msg.sender), IS_KEY_MANAGER), "No authority to add keys");
         require(_purpose != 1, "Can not add new owner");
         require(_keyType != 0);
 
@@ -148,9 +148,9 @@ contract Passport is PassportInterface {
      * @return Boolen true on success
      */
     function removeKey(bytes32 _key, uint256 _purpose) public returns (bool success){
-        require(keyHasPurpose(bytes32(msg.sender), 2), "No authority to remove keys");
+        require(keyHasPurpose(bytes32(msg.sender), IS_KEY_MANAGER), "No authority to remove keys");
         //Todo can remove owner from other pruposes?
-        require(!keyHasPurpose(_key, 1), "Cant remove owner key");
+        require(!keyHasPurpose(_key, IS_OWNER), "Cant remove owner key");
 
         require(keys[_key].key == _key, "Key does not exist and cant be removed");
 
@@ -225,7 +225,7 @@ contract Passport is PassportInterface {
     {
         claimId = keccak256(issuer, _topic);
      
-        if(!keyHasPurpose(bytes32(msg.sender), 3)){
+        if(!keyHasPurpose(bytes32(msg.sender), IS_CLAIM_MANAGER)){
             emit ClaimRequested(claimId, _topic, _scheme, issuer, _signature, _data, _uri);
             return claimId;
         }
@@ -248,7 +248,7 @@ contract Passport is PassportInterface {
      * @return Boolean true on success
      */
     function removeClaim(bytes32 _claimId) public returns (bool success){
-        require(keyHasPurpose(bytes32(msg.sender), 3), "No authority to remove claims");
+        require(keyHasPurpose(bytes32(msg.sender), IS_CLAIM_MANAGER), "No authority to remove claims");
         if(claims[_claimId].issuer != address(0)){
             delete claims[_claimId];
         }
