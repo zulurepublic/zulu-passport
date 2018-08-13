@@ -272,7 +272,7 @@ contract(
         beforeEach(async () => {
           await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: prupose3});
         });
-        it.only("should remove an existing claim by user with purpose 3", async () => {
+        it("should remove an existing claim by user with purpose 3", async () => {
           let claimId = keccak256(issuerZulu, topic);
           let claims = await passport.getClaimIdsByTopic.call(topic);
           let claimsLength = claims.length; 
