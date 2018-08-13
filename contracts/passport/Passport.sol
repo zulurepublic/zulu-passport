@@ -39,6 +39,11 @@ contract Passport is PassportInterface {
 
     bool initialized = false;
 
+    // Functions
+    /**
+     * @dev This initializes the contract, cant use constructor because of cloneFactory.
+     * @param sender address of the identity owner
+     */
     function init(
         address sender
     )
@@ -60,8 +65,6 @@ contract Passport is PassportInterface {
         supportedInterfaces[ERC165ID()] = true;
         supportedInterfaces[PassportInterfaceID()] = true;
     }
-
-    // Functions
 
     /**
      * @dev Getter for key struct
@@ -146,7 +149,6 @@ contract Passport is PassportInterface {
      * @param _purpose uint256 of the purpose
      * @return Boolen true on success
      */
-
     function removeKey(bytes32 _key, uint256 _purpose) public returns (bool success) {
         require(keyHasPurpose(bytes32(msg.sender), IS_KEY_MANAGER), "No authority to remove keys");
         //Todo can remove owner from other pruposes?

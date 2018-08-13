@@ -74,6 +74,7 @@ Claims have the topic, scheme, issuer, signature, data, and uri as attributes. T
 -   `signature` is the signed keccak256(abi.encode(passportAddress, topic, data)) by issuer.
 -   `data` is data that the issuer wants to be part of the claim. This can be used to make information public, give general information, or encrypted data. This should be used in a way that fits the use case for which the claim is being used.
 -   `uri`, the location of the claim, this can be HTTP links, swarm hashes, IPFS hashes, and such. (this can be changed by identity at will so should not be used for necessary data).
+
 For more details on the functions of the passport see the [Documentation](https://github.com/zulurepublic/zulu-passport/wiki/).
 
 ## 4. Development
