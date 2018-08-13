@@ -58,7 +58,8 @@ The last interesting contract is the `ClaimVerifier`, which can be used to verif
 ### Passport
 
 The Passport is the place where people can manage their claims and keys.
-The following purposes of keys exist so far they all come with additional rights that will be explained in the following:
+Keys are in many cases your ethereum addresses, but could also be other types of public keys. There exist different functions in the passport contract for adding/removing/getting keys that are explained in the [Documentation](https://github.com/zulurepublic/zulu-passport/wiki/). The following purposes of keys exist so far, they all come with additional rights that will be explained in the following:
+
 -   `IS_OWNER` = 1; //This is the address (key) that the passport is identified with. It can't be replaced and a second one cannot be added. Actions taken by this key should be treated as having been made by this passport contract and claims on the passport should be taken into account as necessary.
 
 -   `IS_KEY_MANAGER` = 2; //Keys with this purpose can add and remove other key purposes.
@@ -66,7 +67,8 @@ The following purposes of keys exist so far they all come with additional rights
 -   `IS_CLAIM_SIGNER` = 4; //Keys with this purpose can sign claims in name of the passport. If a key of this type is removed, all claims issued from it in the name of the passport should be treated as invalid.
 -   `IS_SELF_CLAIM_MANAGER` = 5; //Keys with this purpose can add and remove claims issued by the key itself.
 
-Claims have the topic, scheme, issuer, signature, data, and uri as attributes. These are explained in the following section.
+The Passport also has functions for adding/removing/changing claims, that are explained in the [Documentation](https://github.com/zulurepublic/zulu-passport/wiki/). 
+Claims have 6 atributes topic, scheme, issuer, signature, data, and uri as attributes. These are explained in the following section.
 
 -   `topic` is an uint256 were the number correlates to a topic. Topics could, for example, be KYC, Citizen of .., has a facebook account, ...
 -   `scheme` is an uint256 were the number corresponds to the key signing method that is being used. 1 is here the ECDSA standard Ethereum uses and the only one implemented so far.
