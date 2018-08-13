@@ -11,12 +11,10 @@ contract ClaimVerifier {
     using ERC165Query for address;
     using BytesLib for bytes;
 
- 
     bytes constant ETH_PREFIX = "\x19Ethereum Signed Message:\n32";
 
     event ClaimValid(address _issuer, PassportInterface _identity, uint256 claimType);
     event ClaimInvalid(address _issuer, PassportInterface _identity, uint256 claimType);
-
 
     function PassportID() public pure returns (bytes4) {
         return (0x61f0aaf8);
@@ -24,11 +22,11 @@ contract ClaimVerifier {
 
     function getSignatureAddress(bytes32 toSign, bytes signature)
         public
+        pure
         returns (address)
     {
         return keccak256(abi.encodePacked(ETH_PREFIX, toSign)).recover(signature);
     }
-
 
     function claimAndDataIsValid(address _issuer, PassportInterface _identity, uint256 _topic, bytes _data)
     public
@@ -47,7 +45,7 @@ contract ClaimVerifier {
         // Fetch claim from user
         ( topic, scheme, issuer, sig, data, ) = _identity.getClaim(claimId);
         if (data.equal(_data) && issuer == _issuer && topic == _topic) {
-        
+
             return _validSignature(address(_identity), topic, scheme, issuer, sig, data);
         }
         return false;
@@ -66,9 +64,9 @@ contract ClaimVerifier {
         bytes memory data;
 
         bytes32 claimId = keccak256(abi.encodePacked(_issuer, _topic));
-        
+
         ( topic, scheme, issuer, sig, data, ) = _identity.getClaim(claimId);
-        if(issuer == _issuer && topic == _topic){
+        if (issuer == _issuer && topic == _topic) {
             return _validSignature(address(_identity), topic, scheme, issuer, sig, data);
         }
         return false;
@@ -95,7 +93,7 @@ contract ClaimVerifier {
             if (issuer.doesContractImplementInterface(PassportID())) {
                 return PassportInterface(issuer).keyHasPurpose(bytes32(signedBy), 4);
             }
-        } 
+        }
         //All else Invalid
         return false;
     }

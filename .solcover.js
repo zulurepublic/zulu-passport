@@ -4,6 +4,6 @@ module.exports = {
         'node --max-old-space-size=4096 ../node_modules/.bin/truffle test --network coverage',
     compileCommand:
         'node --max-old-space-size=4096 ../node_modules/.bin/truffle compile --network coverage',
-    skipFiles: ['Migrations.sol', 'tests', 'ZuluPassportTestUpgradable.sol', 'Libary/BytesLib.sol', 'identity/TestContract.sol;'],
+    skipFiles: ['Migrations.sol', 'lib/BytesLib.sol'],
     copyPackages: ['zeppelin-solidity']
 };
