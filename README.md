@@ -82,7 +82,8 @@ For more details on the functions of the passport see the [Documentation](https:
 
 ## 4. How to use it?
 
-To create a passport for an address call the `createPassport` function on `passportCloneFactory`, that is deployed at [0x84398ae453f59b1f8a306a941d25dbc4367c9ce9](https://rinkeby.etherscan.io/address/0x84398ae453f59b1f8a306a941d25dbc4367c9ce9) needs to be called. This will give you a deployed passport on Rinkeby network. With that contract, you then can use all the functionality described. 
+To create a passport for an address call the `createPassport` function on `passportCloneFactory`, that is deployed at [0x84398ae453f59b1f8a306a941d25dbc4367c9ce9](https://rinkeby.etherscan.io/address/0x84398ae453f59b1f8a306a941d25dbc4367c9ce9) needs to be called. This will give you a deployed passport on Rinkeby network. You can find your passport contract address in the `passports` map, by looking up the ethereum address you deployed the contract with. 
+With that contract, you then can use all the functionality described. 
 
 ## 5. Development
 
