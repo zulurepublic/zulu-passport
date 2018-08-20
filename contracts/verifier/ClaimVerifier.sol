@@ -16,6 +16,10 @@ contract ClaimVerifier {
     event ClaimValid(address _issuer, PassportInterface _identity, uint256 claimType);
     event ClaimInvalid(address _issuer, PassportInterface _identity, uint256 claimType);
 
+    /**
+     * @dev Gets the ERC165 PassportID of passport
+     * @return bytes4 ERC165 id of passport contract
+     */
     function PassportID() public pure returns (bytes4) {
         return (0x61f0aaf8);
     }
@@ -28,6 +32,14 @@ contract ClaimVerifier {
         return keccak256(abi.encodePacked(ETH_PREFIX, toSign)).recover(signature);
     }
 
+    /**
+     * @dev Checks if a claim is and its data is valid
+     * @param _issuer address of the issuer
+     * @param _identity passport of the claimHolder
+     * @param _topic uint256 of the topic that is issued 
+     * @param _data bytes of the data that is issued 
+     * @return Boolean if the claim and data is valid
+     */
     function claimAndDataIsValid(address _issuer, PassportInterface _identity, uint256 _topic, bytes _data)
     public
     view
@@ -52,6 +64,13 @@ contract ClaimVerifier {
 
     }
 
+    /**
+     * @dev Checks if a claim is valid
+     * @param _issuer address of the issuer
+     * @param _identity passport of the claimHolder
+     * @param _topic uint256 of the topic that is issued 
+     * @return Boolean if the claim is valid
+     */
     function claimIsValid(address _issuer, PassportInterface _identity, uint256 _topic)
     public
     view
