@@ -10,7 +10,6 @@ const should = require("chai")
   .use(require("chai-as-promised"))
   .use(require("chai-bignumber")(BigNumber))
   .should();
-const expect = require("chai").expect;
 
 
 contract(
@@ -20,7 +19,7 @@ contract(
     const data = "test data";
     const topic = 99;
     const scheme = 1;
-    const uri = "www.zulurepublic.io"; 
+    const uri = "www.zulurepublic.io";
     let testClaimToSign, signedClaim;
     beforeEach(async () => {
         ({passportCloneFactory} = await createPassportCloneFactory(issuerZulu));
@@ -31,7 +30,7 @@ contract(
         testClaimToSign = keccak256(passport.address,
             topic,
             data );
-    
+
         signedClaim = web3.eth.sign(issuerZulu, testClaimToSign);
         let byteAddr = await passportHelper.addressToBytes32(prupose2);
         await passport.addKey(byteAddr, 2, 1, {from: citizen1});
@@ -48,7 +47,7 @@ contract(
         let claimId = keccak256(_issuer, _topic);
 
         const [topic2, scheme2, issuer2, signature2, data2, uri2] = await id.getClaim(claimId);
-  
+
         topic2.should.be.bignumber.equal(_topic);
         scheme2.should.be.bignumber.equal(1);
         assert.equal(issuer2, _issuer);
@@ -72,7 +71,7 @@ contract(
         _keyType.should.be.bignumber.eq(keyType);
         _purpose.should.be.bignumber.eq(purposes);
     }
-    
+
     it("ERC165ID", async () => {
         "0x01ffc9a7".should.be.eq( await passport.ERC165ID()) //0x01ffc9a7
     });
@@ -262,9 +261,9 @@ contract(
 
         });
         it("should NOT add a claim for key not of purpose 3", async () => {
-          await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: prupose2});  
+          await passport.addClaim(topic, scheme, issuerZulu, signedClaim, data, uri, {from: prupose2});
           let claimId = keccak256(issuerZulu, topic);
-          
+
           testEmptyClaim(passport, claimId)
         });
     });
@@ -275,7 +274,7 @@ contract(
         it("should remove an existing claim by user with purpose 3", async () => {
           let claimId = keccak256(issuerZulu, topic);
           let claims = await passport.getClaimIdsByTopic.call(topic);
-          let claimsLength = claims.length; 
+          let claimsLength = claims.length;
           await passport.removeClaim(claimId, {from: prupose3}).should.be.fulfilled;
           claimsLength.should.be.bignumber.eq( (await passport.getClaimIdsByTopic.call(topic)).length+1);
 
@@ -283,9 +282,9 @@ contract(
         });
         it("should NOT remove an existing claim for user WITHOUT purpose 3", async () => {
           let claimId = keccak256(issuerZulu, topic);
-          await passport.removeClaim(claimId, {from: prupose2}).should.be.rejectedWith('revert');  
+          await passport.removeClaim(claimId, {from: prupose2}).should.be.rejectedWith('revert');
         });
-        
+
     });
 
 });
