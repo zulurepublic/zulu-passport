@@ -3,5 +3,8 @@ node_modules
 /flats
 .specifications
 .DS_Store
-/coverageEnv
-/coverage
+
+# coverage files
+coverage
+coverage.json
+coverageEnv
