@@ -151,7 +151,6 @@ contract Passport is PassportInterface {
      */
     function removeKey(bytes32 _key, uint256 _purpose) public returns (bool success) {
         require(keyHasPurpose(bytes32(msg.sender), IS_KEY_MANAGER), "No authority to remove keys");
-        //Todo can remove owner from other pruposes?
         require(!keyHasPurpose(_key, IS_OWNER), "Cant remove owner key");
 
         require(keys[_key].key == _key, "Key does not exist and cant be removed");
@@ -160,7 +159,6 @@ contract Passport is PassportInterface {
         keys[_key].purpose = ~shiftPurpose(_purpose) & keys[_key].purpose;
 
         //Look for key in keysByPurpose
-
         for (uint i = 0; i < keysByPurpose[_purpose].length; i++) {
             if (keysByPurpose[_purpose][i] == _key) {
                 keysByPurpose[_purpose][i] = keysByPurpose[_purpose][keysByPurpose[_purpose].length-1];
@@ -212,7 +210,7 @@ contract Passport is PassportInterface {
      * @param _signature bytes of the signature
      * @param _data bytes of the data
      * @param _uri string of the uri
-     * @return claimIds of a claims
+     * @return claimIs of a claim
      */
     function addClaim(
         uint256 _topic,

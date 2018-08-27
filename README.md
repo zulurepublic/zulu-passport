@@ -79,7 +79,13 @@ Claims have 6 atributes topic, scheme, issuer, signature, data, and uri as attri
 
 For more details on the functions of the passport see the [Documentation](https://github.com/zulurepublic/zulu-passport/wiki/).
 
-## 4. Development
+
+## 4. How to use it?
+
+To create a passport for an address call the `createPassport` function on `passportCloneFactory`, that is deployed at [0x84398ae453f59b1f8a306a941d25dbc4367c9ce9](https://rinkeby.etherscan.io/address/0x84398ae453f59b1f8a306a941d25dbc4367c9ce9) needs to be called. This will give you a deployed passport on Rinkeby network. You can find your passport contract address in the `passports` map, by looking up the ethereum address you deployed the contract with. 
+With that contract, you then can use all the functionality described. 
+
+## 5. Development
 
 **Dependencies**
 
@@ -114,11 +120,11 @@ To generate flatten version of contracts and serve them to remix, type:
 
 -   `npm run remix`
 
-## 5. Licensing
+## 6. Licensing
 
 Zulu-Passport is licensed under the [GNU AFFERO GENERAL PUBLIC LICENSE](https://www.gnu.org/licenses/agpl-3.0.en.html) (agpl-3.0) license. 
 
-## 6. What is the Zulu Republic Foundation?
+## 7. What is the Zulu Republic Foundation?
 
 The Zulu Republic Foundation is a Swiss organization charged with managing the underlying technology of the Zulu Republic blockchain ecosystem. The foundation’s mission is to advance the development of decentralized technologies, to promote human rights and empowerment around the globe, and to reduce the global digital divide.
 
