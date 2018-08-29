@@ -126,7 +126,7 @@ contract("ClaimVerifier", ([user1, issuerZulu, citizen1, citizen2, noCitizen]) =
       )).should.be.true;
     });
 
-    it("should return false for existing claim if issuer is passport and NOT signed by key of purpose 1", async () => {
+    it("should return false for existing claim if issuer is passport and NOT signed by key of purpose IS_CLAIM_SIGNER", async () => {
       signedClaim = web3.eth.sign(user1, testClaimToSign);
 
       await passportCitizen1.addClaim(
@@ -229,7 +229,7 @@ contract("ClaimVerifier", ([user1, issuerZulu, citizen1, citizen2, noCitizen]) =
       )).should.be.false;
     });
 
-    it("should be valid for existing claim issued by passport and singed by key of purpose 1", async () => {
+    it("should be valid for existing claim issued by passport and singed by key of purpose IS_CLAIM_SIGNER", async () => {
       signedClaim = web3.eth.sign(citizen2, testClaimToSign);
 
       await passportCitizen1.addClaim(
@@ -258,7 +258,7 @@ contract("ClaimVerifier", ([user1, issuerZulu, citizen1, citizen2, noCitizen]) =
       )).should.be.true;
     });
 
-    it("should return false for existing claim if issuer is passport and NOT signed by key of purpose 1", async () => {
+    it("should return false for existing claim if issuer is passport and NOT signed by key of purpose IS_CLAIM_SIGNER", async () => {
       signedClaim = web3.eth.sign(user1, testClaimToSign);
 
       await passportCitizen1.addClaim(
