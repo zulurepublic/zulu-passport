@@ -9,7 +9,7 @@ const should = require("chai")
   .use(require("chai-bignumber")(BigNumber))
   .should();
 
-contract("ClaimVerifier", ([user1, issuerZulu, citizen1, citizen2]) => {
+contract("ClaimVerifier", ([user1, issuerZulu, citizen1, citizen2, noCitizen]) => {
   let passportCitizen1, passportCitizen2, passportCloneFactory, claimVerifier;
   const data = "test data";
   const topic = 99; //77 is citizen in example
@@ -180,6 +180,15 @@ contract("ClaimVerifier", ([user1, issuerZulu, citizen1, citizen2]) => {
         topic
       )).should.be.false;
     });
+    it("should return false for address that is no passport", async () => {
+      
+      (await claimVerifier.claimIsValid(
+        passportCitizen1.address,
+        noCitizen,
+        topic
+      )).should.be.false;
+    });
+
   });
 
   describe("#claimAndDataIsValid", () => {
@@ -301,6 +310,15 @@ contract("ClaimVerifier", ([user1, issuerZulu, citizen1, citizen2]) => {
       (await claimVerifier.claimAndDataIsValid.call(
         passportCitizen2.address,
         passportCitizen1.address,
+        topic,
+        data
+      )).should.be.false;
+    });
+    it("should return false for address that is no passport", async () => {
+      
+      (await claimVerifier.claimAndDataIsValid(
+        passportCitizen1.address,
+        noCitizen,
         topic,
         data
       )).should.be.false;

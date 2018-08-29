@@ -40,7 +40,7 @@ contract ClaimVerifier {
      * @param _data bytes of the data that is issued 
      * @return Boolean if the claim and data is valid
      */
-    function claimAndDataIsValid(address _issuer, PassportInterface _identity, uint256 _topic, bytes _data)
+    function claimAndDataIsValid(address _issuer, address _identity, uint256 _topic, bytes _data)
     public
     view
     returns (bool)
@@ -54,10 +54,12 @@ contract ClaimVerifier {
         // Construct claimId (issuer + claim type)
         bytes32 claimId = keccak256(abi.encodePacked(_issuer, _topic));
 
+        if(!_identity.doesContractImplementInterface(PassportID())){
+            return false;
+        }
         // Fetch claim from user
-        ( topic, scheme, issuer, sig, data, ) = _identity.getClaim(claimId);
+        ( topic, scheme, issuer, sig, data, ) = PassportInterface(_identity).getClaim(claimId);
         if (data.equal(_data) && issuer == _issuer && topic == _topic) {
-
             return _validSignature(address(_identity), topic, scheme, issuer, sig, data);
         }
         return false;
@@ -71,7 +73,7 @@ contract ClaimVerifier {
      * @param _topic uint256 of the topic that is issued 
      * @return Boolean if the claim is valid
      */
-    function claimIsValid(address _issuer, PassportInterface _identity, uint256 _topic)
+    function claimIsValid(address _issuer, address _identity, uint256 _topic)
     public
     view
     returns (bool)
@@ -83,8 +85,11 @@ contract ClaimVerifier {
         bytes memory data;
 
         bytes32 claimId = keccak256(abi.encodePacked(_issuer, _topic));
+        if(!_identity.doesContractImplementInterface(PassportID())){
+            return false;
+        }
 
-        ( topic, scheme, issuer, sig, data, ) = _identity.getClaim(claimId);
+        ( topic, scheme, issuer, sig, data, ) = PassportInterface(_identity).getClaim(claimId);
         if (issuer == _issuer && topic == _topic) {
             return _validSignature(address(_identity), topic, scheme, issuer, sig, data);
         }
