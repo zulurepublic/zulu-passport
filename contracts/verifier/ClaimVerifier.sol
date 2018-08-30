@@ -33,7 +33,7 @@ contract ClaimVerifier {
     }
 
     /**
-     * @dev Checks if a claim is and its data is valid
+     * @dev Checks if a claim and its data is valid
      * @param _issuer address of the issuer
      * @param _identity passport of the claimHolder
      * @param _topic uint256 of the topic that is issued 
